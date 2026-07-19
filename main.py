@@ -17,11 +17,8 @@ st.set_page_config(page_title=APP_TITLE, page_icon="📊", layout="wide")
 st.title(f"📊 {APP_TITLE}")
 st.caption("Upload a dataset, get instant metrics, and ask business questions in plain English.")
 
-if not os.environ.get("GROQ_API_KEY"):
-    st.error(
-        "GROQ_API_KEY is not set. Create a `.env` file in this folder "
-        "(see `.env.example`) with your Groq API key, then restart the app."
-    )
+if "GROQ_API_KEY" not in st.secrets and not os.environ.get("GROQ_API_KEY"):
+    st.error("GROQ_API_KEY is not set. Add it in Streamlit Cloud's Secrets settings.")
     st.stop()
 
 if "df" not in st.session_state:
@@ -37,34 +34,45 @@ with st.sidebar:
     st.header("1. Upload Dataset")
     uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx", "xls"])
 
-    if uploaded_file is not None:
-        if st.button("Load Dataset", type="primary"):
-            with st.spinner("Reading and analyzing dataset..."):
-                save_path = os.path.join(UPLOAD_DIR, uploaded_file.name)
-                with open(save_path, "wb") as f:
-                    f.write(uploaded_file.getvalue())
+    st.caption("No file handy? Try the demo dataset:")
+    load_sample = st.button("Load Sample Dataset")
 
-                try:
-                    df = load_dataset(uploaded_file.getvalue(), uploaded_file.name)
-                except Exception as exc:  # noqa: BLE001
-                    st.error(f"Could not read this file: {exc}")
-                    st.stop()
+    trigger_load = load_sample or (uploaded_file is not None and st.button("Load Dataset", type="primary"))
 
-                warnings = validate_dataset(df)
-                if warnings:
-                    for w in warnings:
-                        st.warning(w)
-                    st.stop()
+    if trigger_load:
+        with st.spinner("Reading and analyzing dataset..."):
+            try:
+                if load_sample:
+                    file_name = "filtered_sales.csv"
+                    with open(file_name, "rb") as f:
+                        file_bytes = f.read()
+                else:
+                    file_name = uploaded_file.name
+                    file_bytes = uploaded_file.getvalue()
+                    save_path = os.path.join(UPLOAD_DIR, file_name)
+                    with open(save_path, "wb") as f:
+                        f.write(file_bytes)
 
-                llm = get_llm()
-                metrics = calculate_business_metrics(df)
-                dataset_summary = generate_initial_insights(df, metrics, llm=llm)
+                df = load_dataset(file_bytes, file_name)
+            except Exception as exc:  # noqa: BLE001
+                st.error(f"Could not read this file: {exc}")
+                st.stop()
 
-                st.session_state.df = df
-                st.session_state.metrics = metrics
-                st.session_state.dataset_summary = dataset_summary
-                st.session_state.chat_history = []
-            st.success("Dataset loaded successfully!")
+            warnings = validate_dataset(df)
+            if warnings:
+                for w in warnings:
+                    st.warning(w)
+                st.stop()
+
+            llm = get_llm()
+            metrics = calculate_business_metrics(df)
+            dataset_summary = generate_initial_insights(df, metrics, llm=llm)
+
+            st.session_state.df = df
+            st.session_state.metrics = metrics
+            st.session_state.dataset_summary = dataset_summary
+            st.session_state.chat_history = []
+        st.success("Dataset loaded successfully!")
 
 if st.session_state.df is not None:
     df = st.session_state.df
@@ -118,7 +126,6 @@ if st.session_state.df is not None:
         st.write(f"**Duplicate rows:** {stats['duplicate_rows']}")
 
     st.divider()
-
 
     st.header("2. Ask a Business Question")
     st.caption(
