@@ -103,6 +103,7 @@ def execute_analysis(df: pd.DataFrame, intent: Dict[str, Any], metrics: Business
         grouped = df.groupby(product_col)[value_col].sum().sort_values(ascending=False).head(top_n)
         return {"top_products": grouped.to_dict()}
 
+    
     # "general" fallback: try to match the question against any column name directly
     return {"note": "This question didn't match a supported analysis type."}
 
