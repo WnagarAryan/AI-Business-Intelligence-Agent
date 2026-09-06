@@ -21,6 +21,5 @@ def get_llm(model_name: str = MODEL_NAME, temperature: float = TEMPERATURE) -> C
         )
     return ChatGroq(model=model_name, temperature=temperature)
 
-
-# python -m pip install -r requirements.txt
-# python -m streamlit run main.py
+## python -m pip install -r requirements.txt
+## python -m streamlit run main.py
