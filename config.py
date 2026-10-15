@@ -7,7 +7,7 @@ load_dotenv()
 
 APP_TITLE = "AI Business Intelligence Agent"
 UPLOAD_DIR = "uploads"
-MODEL_NAME = "llama-3.3-70b-versatile"
+MODEL_NAME = "openai/gpt-oss-120b"
 TEMPERATURE = 0
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
