@@ -154,3 +154,4 @@ if st.session_state.df is not None:
 
 else:
     st.info("Upload a dataset (CSV or Excel) from the sidebar and click **Load Dataset** to get started.")
+
