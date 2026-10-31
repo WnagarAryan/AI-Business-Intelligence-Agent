@@ -9,8 +9,6 @@ from data_loader import COLUMN_KEYWORDS, detect_dataset_type, find_column, get_s
 from models import AnalysisResponse, BusinessMetrics, DatasetSummary
 from prompts import qa_prompt, recommendation_prompt, summary_prompt
 
-
-
 def generate_initial_insights(df: pd.DataFrame, metrics: BusinessMetrics, llm=None) -> DatasetSummary:
     """Summarize the dataset, flag data quality issues, and suggest questions to ask."""
     llm = llm or get_llm()
