@@ -1,10 +1,7 @@
 import io
 from typing import Dict, List, Optional
-
 import pandas as pd
-
 from models import BusinessMetrics
-
 
 COLUMN_KEYWORDS: Dict[str, List[str]] = {
 
@@ -17,7 +14,6 @@ COLUMN_KEYWORDS: Dict[str, List[str]] = {
     "product": ["product", "item", "sku"],
     "region": ["region", "location", "state", "country", "city"],
 }
-
 
 def load_dataset(file_bytes: bytes, filename: str) -> pd.DataFrame:
     """Load a CSV or Excel file (given as bytes) into a DataFrame."""
