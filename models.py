@@ -1,7 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 
-
 class DatasetSummary(BaseModel):
     """Initial AI-generated overview of an uploaded dataset."""
 
@@ -13,7 +12,6 @@ class DatasetSummary(BaseModel):
     suggested_questions: List[str] = Field(
         default_factory=list, description="Example business questions the user could ask about this dataset"
     )
-
 
 class BusinessMetrics(BaseModel):
     """Headline business metrics calculated by Pandas. Fields are None if the dataset has no matching column."""
