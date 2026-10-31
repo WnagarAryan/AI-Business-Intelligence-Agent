@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 
+
 load_dotenv()  
 
 APP_TITLE = "AI Business Intelligence Agent"
@@ -22,4 +23,3 @@ def get_llm(model_name: str = MODEL_NAME, temperature: float = TEMPERATURE) -> C
 
 ## python -m pip install -r requirements.txt
 ## python -m streamlit run main.py
-
