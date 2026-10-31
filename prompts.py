@@ -69,7 +69,6 @@ Business metrics (calculated by Pandas):
 Give a short answer, a brief explanation grounded in the metrics above,
 and one or two concrete, actionable recommendations.
 """
-
 recommendation_prompt = PromptTemplate(
     template=recommendation_template,
     input_variables=["question", "dataset_summary", "metrics"],
