@@ -52,7 +52,6 @@ qa_prompt = PromptTemplate(
     input_variables=["question", "analysis_type", "result_json"],
 )
 
-
 recommendation_template = """You are an expert Business Intelligence Consultant.
 The user wants general recommendations for their business, based on the
 metrics below. Respond following the AnalysisResponse schema.
